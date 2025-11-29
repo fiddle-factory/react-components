@@ -66,8 +66,20 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       className={combinedClassName}
       disabled={isDisabled || isLoading}
       type={type}
+      data-config-id="button-red-pulse"
+      style={{
+        animation: "redPulse 2s infinite",
+        position: "relative"
+      }}
       {...rest}
     >
+      <style jsx>{`
+        @keyframes redPulse {
+          0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+          50% { box-shadow: 0 0 10px 4px rgba(255, 0, 0, 0.6); }
+          100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+        }
+      `}</style>
       <ButtonBackground
         isRounded={isRounded}
         variant={variant}
@@ -105,3 +117,4 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
