@@ -5,5 +5,7 @@ export {
   type ButtonProps,
 } from "@/button"
 export { INPUT_CLASS_NAME, Input, type InputProps } from "@/input"
+export { InputStatusFrame, type InputStatusFrameProps } from "@/input-status-frame"
 export { LABEL_CLASS_NAME, Label, type LabelProps } from "@/label"
 export { SPACER_CLASS_NAME, Spacer, type SpacerProps } from "@/spacer"
+
