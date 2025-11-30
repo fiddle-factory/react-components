@@ -8,6 +8,8 @@ export interface InputProps
   isReadOnly?: boolean
   isRequired?: boolean
   size?: 32 | 36 | 40 | 44
+  status?: "success" | "error"
+  statusText?: string
 }
 
 export function Input(props: InputProps): JSX.Element {
@@ -19,6 +21,8 @@ export function Input(props: InputProps): JSX.Element {
     isRequired = false,
     size = 40,
     type = "text",
+    status,
+    statusText,
     ...rest
   } = props
 
@@ -28,27 +32,39 @@ export function Input(props: InputProps): JSX.Element {
     ${INPUT_CLASS_NAME.BASE}
     ${INPUT_CLASS_NAME.SIZE[size]}
     ${isPassword ? INPUT_CLASS_NAME.PASSWORD : ""}
+    ${status ? INPUT_CLASS_NAME.STATUS[status] : ""}
     ${customClassName}
   `
     .replaceAll(/\s+/g, " ")
     .trim()
 
   return (
-    <input
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled}
-      readOnly={isReadOnly}
-      required={isRequired}
-      type={type}
-      {...rest}
-    />
+    <div className={styles.inputContainer}>
+      <input
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled}
+        readOnly={isReadOnly}
+        required={isRequired}
+        type={type}
+        {...rest}
+      />
+      {statusText && (
+        <div className={`${styles.statusText} ${status ? styles[`statusText__${status}`] : ""}`}>
+          {statusText}
+        </div>
+      )}
+    </div>
   )
 }
 
 export const INPUT_CLASS_NAME = {
   BASE: styles.input,
   PASSWORD: styles.input__password,
+  STATUS: {
+    success: styles.input__success,
+    error: styles.input__error,
+  },
   SIZE: {
     32: styles.input__size_32,
     36: styles.input__size_36,
@@ -56,3 +72,6 @@ export const INPUT_CLASS_NAME = {
     44: styles.input__size_44,
   },
 } as const
+
+
+

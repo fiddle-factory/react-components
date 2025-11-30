@@ -68,6 +68,39 @@
 }
 
 /* ===================================================== */
+/* Status */
+/* ===================================================== */
+.inputContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statusText {
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 2px;
+  padding: 0 4px;
+}
+
+.statusText__success {
+  color: var(--color-success, #16a34a);
+}
+
+.statusText__error {
+  color: var(--color-error, #dc2626);
+}
+
+.input__success {
+  border-color: var(--color-success, #16a34a);
+}
+
+.input__error {
+  border-color: var(--color-error, #dc2626);
+}
+
+/* ===================================================== */
 /* Size */
 /* ===================================================== */
 .input__size_32 {
@@ -85,3 +118,4 @@
 .input__size_44 {
   --size: 44px;
 }
+
