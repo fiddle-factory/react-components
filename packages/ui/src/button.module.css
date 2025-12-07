@@ -230,8 +230,30 @@
     inset 0 1px 0 0 rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Dark */
+.button__variant_dark {
+  color: var(--color-white, #ffffff);
+  background-image: linear-gradient(
+    to bottom,
+    #1a1a1a,
+    #000000
+  );
+  border-color: #000000;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+.button__variant_dark:enabled[aria-pressed="true"],
+.button__variant_dark:enabled:active {
+  box-shadow:
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 0 rgba(0, 0, 0, 0.5) !important;
+}
+
 /* Group */
 .button__variant_accent,
+.button__variant_dark,
 .button__variant_primary,
 .button__variant_secondary {
   filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.05));
@@ -241,6 +263,10 @@
   filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.1));
 }
 
+.button__variant_dark > * {
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.05));
+}
+
 .button__variant_primary > * {
   filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.1));
 }
@@ -248,6 +274,9 @@
 .button__variant_accent:enabled:active,
 .button__variant_accent:enabled:hover,
 .button__variant_accent:enabled[aria-pressed="true"],
+.button__variant_dark:enabled:active,
+.button__variant_dark:enabled:hover,
+.button__variant_dark:enabled[aria-pressed="true"],
 .button__variant_primary:enabled:active,
 .button__variant_primary:enabled:hover,
 .button__variant_primary:enabled[aria-pressed="true"],
@@ -273,3 +302,5 @@
 .button__width_full {
   width: 100%;
 }
+
+

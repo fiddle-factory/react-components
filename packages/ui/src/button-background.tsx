@@ -11,13 +11,14 @@ export function ButtonBackground(props: ButtonBackgroundProps): JSX.Element {
     ${BUTTON_BACKGROUND_CLASS_NAME.BASE}
     ${isRounded ? BUTTON_BACKGROUND_CLASS_NAME.ROUNDED.FULL : BUTTON_BACKGROUND_CLASS_NAME.ROUNDED.BASE}
     ${variant === "accent" ? BUTTON_BACKGROUND_CLASS_NAME.VARIANT.ACCENT : ""}
+    ${variant === "dark" ? BUTTON_BACKGROUND_CLASS_NAME.VARIANT.DARK : ""}
     ${variant === "primary" ? BUTTON_BACKGROUND_CLASS_NAME.VARIANT.PRIMARY : ""}
     ${variant === "secondary" ? BUTTON_BACKGROUND_CLASS_NAME.VARIANT.SECONDARY : ""}
   `
     .replaceAll(/\s+/g, " ")
     .trim()
 
-  if (!(variant === "accent" || variant === "primary" || variant === "secondary")) return <></>
+  if (!(variant === "accent" || variant === "dark" || variant === "primary" || variant === "secondary")) return <></>
 
   return (
     <div
@@ -35,7 +36,10 @@ export const BUTTON_BACKGROUND_CLASS_NAME = {
   },
   VARIANT: {
     ACCENT: styles.button_background__variant_accent,
+    DARK: styles.button_background__variant_dark,
     PRIMARY: styles.button_background__variant_primary,
     SECONDARY: styles.button_background__variant_secondary,
   },
 } as const
+
+
