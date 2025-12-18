@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react"
 import type { ComponentProps, JSX, ReactNode } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
@@ -48,6 +49,30 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  // Animation configuration state
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [hoverScale, setHoverScale] = useState(1.05)
+  const [hoverRotate, setHoverRotate] = useState(3)
+  const [hoverBrightness, setHoverBrightness] = useState(1.1)
+  const [transitionDuration, setTransitionDuration] = useState(0.2)
+  
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+    
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.hoverScale !== undefined) setHoverScale(params.hoverScale)
+      if (params.hoverRotate !== undefined) setHoverRotate(params.hoverRotate)
+      if (params.hoverBrightness !== undefined) setHoverBrightness(params.hoverBrightness)
+      if (params.transitionDuration !== undefined) setTransitionDuration(params.transitionDuration)
+    }
+    
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -62,10 +87,26 @@ export function Button(props: ButtonUnionProps): JSX.Element {
 
   return (
     <button
+      ref={buttonRef}
+      data-config-id="button-hover-animation"
       aria-pressed={isActive}
       className={combinedClassName}
       disabled={isDisabled || isLoading}
       type={type}
+      style={{
+        transition: `transform ${transitionDuration}s ease, filter ${transitionDuration}s ease`,
+        willChange: 'transform, filter',
+      }}
+      onMouseEnter={(e) => {
+        if (!isDisabled && !isLoading) {
+          e.currentTarget.style.transform = `scale(${hoverScale}) rotate(${hoverRotate}deg)`
+          e.currentTarget.style.filter = `brightness(${hoverBrightness})`
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
+        e.currentTarget.style.filter = 'brightness(1)'
+      }}
       {...rest}
     >
       <ButtonBackground
@@ -105,3 +146,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
