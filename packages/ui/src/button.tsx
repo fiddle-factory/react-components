@@ -1,4 +1,5 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +49,28 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [glowColor, setGlowColor] = useState("#60a5fa")
+  const [glowIntensity, setGlowIntensity] = useState(0.8)
+  const [glowSpeed, setGlowSpeed] = useState(2)
+  const [glowSize, setGlowSize] = useState(10)
+
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.glowColor !== undefined) setGlowColor(params.glowColor)
+      if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
+      if (params.glowSpeed !== undefined) setGlowSpeed(params.glowSpeed)
+      if (params.glowSize !== undefined) setGlowSize(params.glowSize)
+    }
+
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -60,24 +83,56 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  const glowKeyframes = `
+    @keyframes buttonGlow {
+      0%, 100% {
+        box-shadow: 0 0 ${glowSize}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity * 0.4}),
+                    0 0 ${glowSize * 2}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity * 0.3}),
+                    inset 0 0 ${glowSize}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity * 0.2});
+      }
+      50% {
+        box-shadow: 0 0 ${glowSize * 2}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity}),
+                    0 0 ${glowSize * 4}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity * 0.6}),
+                    inset 0 0 ${glowSize * 1.5}px rgba(${hexToRgb(glowColor).r}, ${hexToRgb(glowColor).g}, ${hexToRgb(glowColor).b}, ${glowIntensity * 0.4});
+      }
+    }
+  `
+
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
+    <>
+      <style dangerouslySetInnerHTML={{ __html: glowKeyframes }} />
+      <button
+        ref={buttonRef}
+        data-config-id="button-glow-animation"
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        style={{
+          animation: `buttonGlow ${glowSpeed}s ease-in-out infinite`,
+        }}
+        {...rest}
+      >
       <ButtonBackground
         isRounded={isRounded}
         variant={variant}
       />
       {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+    </>
   )
+}
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  hex = hex.replace(/^#/, '')
+  const bigint = parseInt(hex, 16)
+  const r = (bigint >> 16) & 255
+  const g = (bigint >> 8) & 255
+  const b = bigint & 255
+  return { r, g, b }
 }
 
 export const BUTTON_CLASS_NAME = {
@@ -105,3 +160,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
