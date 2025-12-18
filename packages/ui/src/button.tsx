@@ -49,6 +49,33 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  
+  // Animation configuration state
+  const [glowColor, setGlowColor] = useState("#3b82f6")
+  const [glowIntensity, setGlowIntensity] = useState(0.6)
+  const [glowSize, setGlowSize] = useState(10)
+  const [pulseSpeed, setPulseSpeed] = useState(2)
+  const [enableGlow, setEnableGlow] = useState(true)
+  
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+    
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.glowColor !== undefined) setGlowColor(params.glowColor)
+      if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
+      if (params.glowSize !== undefined) setGlowSize(params.glowSize)
+      if (params.pulseSpeed !== undefined) setPulseSpeed(params.pulseSpeed)
+      if (params.enableGlow !== undefined) setEnableGlow(params.enableGlow)
+    }
+    
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -61,23 +88,47 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  const glowStyle = enableGlow ? {
+    boxShadow: `0 0 ${glowSize}px ${glowSize / 2}px ${glowColor}${Math.round(glowIntensity * 255).toString(16).padStart(2, '0')}`,
+    animation: `button-glow-pulse ${pulseSpeed}s ease-in-out infinite`,
+  } : {}
+
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      <button
+        ref={buttonRef}
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        data-config-id="button-glow-effect"
+        style={glowStyle}
+        {...rest}
+      >
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+      {enableGlow && (
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes button-glow-pulse {
+              0%, 100% {
+                box-shadow: 0 0 ${glowSize}px ${glowSize / 2}px ${glowColor}${Math.round(glowIntensity * 255).toString(16).padStart(2, '0')};
+              }
+              50% {
+                box-shadow: 0 0 ${glowSize * 1.8}px ${glowSize}px ${glowColor}${Math.round(glowIntensity * 0.8 * 255).toString(16).padStart(2, '0')};
+              }
+            }
+          `
+        }} />
+      )}
+    </>
   )
 }
 
@@ -106,4 +157,5 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
 
