@@ -1,4 +1,5 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +49,34 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [isHovered, setIsHovered] = useState(false)
+  
+  // Animation configuration state
+  const [glowColor, setGlowColor] = useState("#3b82f6")
+  const [glowIntensity, setGlowIntensity] = useState(20)
+  const [glowSpread, setGlowSpread] = useState(5)
+  const [pulseSpeed, setPulseSpeed] = useState(2)
+  const [hoverScale, setHoverScale] = useState(1.05)
+  
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+    
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.glowColor !== undefined) setGlowColor(params.glowColor)
+      if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
+      if (params.glowSpread !== undefined) setGlowSpread(params.glowSpread)
+      if (params.pulseSpeed !== undefined) setPulseSpeed(params.pulseSpeed)
+      if (params.hoverScale !== undefined) setHoverScale(params.hoverScale)
+    }
+    
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -60,23 +89,66 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  // Helper function to convert hex to rgba
+  const hexToRgba = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
+
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      <style>{`
+        @keyframes glowPulse {
+          0%, 100% {
+            box-shadow: 0 0 ${glowIntensity * 0.5}px ${glowSpread * 0.5}px ${hexToRgba(glowColor, 0.4)},
+                        0 0 ${glowIntensity}px ${glowSpread}px ${hexToRgba(glowColor, 0.2)},
+                        inset 0 0 ${glowIntensity * 0.3}px ${hexToRgba(glowColor, 0.1)};
+          }
+          50% {
+            box-shadow: 0 0 ${glowIntensity}px ${glowSpread}px ${hexToRgba(glowColor, 0.6)},
+                        0 0 ${glowIntensity * 1.5}px ${glowSpread * 1.5}px ${hexToRgba(glowColor, 0.3)},
+                        inset 0 0 ${glowIntensity * 0.5}px ${hexToRgba(glowColor, 0.2)};
+          }
+        }
+      `}</style>
+      <button
+        ref={buttonRef}
+        data-config-id="button-glow-animation"
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        style={{
+          animation: `glowPulse ${pulseSpeed}s ease-in-out infinite`,
+          transform: isHovered ? `scale(${hoverScale})` : 'scale(1)',
+          transition: 'transform 0.3s ease',
+        }}
+        onMouseEnter={(e) => {
+          if (!isDisabled && !isLoading) {
+            setIsHovered(true)
+          }
+          rest.onMouseEnter?.(e)
+        }}
+        onMouseLeave={(e) => {
+          if (!isDisabled && !isLoading) {
+            setIsHovered(false)
+          }
+          rest.onMouseLeave?.(e)
+        }}
+        {...rest}
+      >
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+    </>
   )
 }
 
@@ -105,3 +177,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
