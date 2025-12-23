@@ -15,6 +15,7 @@ export function Label(props: LabelProps): JSX.Element {
   const [borderGap, setBorderGap] = useState(8)
   const [glowIntensity, setGlowIntensity] = useState(0.7)
   const [glowSpeed, setGlowSpeed] = useState(2.5)
+  const [textColor, setTextColor] = useState("#000000")
   
   // Listen for animation configuration updates
   useEffect(() => {
@@ -29,6 +30,7 @@ export function Label(props: LabelProps): JSX.Element {
       if (params.borderGap !== undefined) setBorderGap(params.borderGap)
       if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
       if (params.glowSpeed !== undefined) setGlowSpeed(params.glowSpeed)
+      if (params.textColor !== undefined) setTextColor(params.textColor)
     }
     
     element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
@@ -74,7 +76,7 @@ export function Label(props: LabelProps): JSX.Element {
             boxShadow: `0 0 ${borderHeight * 3}px ${hexToRgba(borderColor, glowIntensity * 0.6)}, 0 0 ${borderHeight * 6}px ${hexToRgba(borderColor, glowIntensity * 0.3)}`
           }}
         />
-        <span>{children}</span>
+        <span style={{ color: textColor }}>{children}</span>
         <span 
           className="label-border-right"
           style={{
@@ -105,5 +107,7 @@ export function Label(props: LabelProps): JSX.Element {
 export const LABEL_CLASS_NAME = {
   BASE: styles.label,
 } as const
+
+
 
 
