@@ -54,6 +54,8 @@ export function Button(props: ButtonUnionProps): JSX.Element {
   const [glowIntensity, setGlowIntensity] = useState(0.8)
   const [glowSpeed, setGlowSpeed] = useState(2)
   const [glowSize, setGlowSize] = useState(10)
+  const [textColor, setTextColor] = useState("#ffffff")
+  const [bgColor, setBgColor] = useState("#1e293b")
 
   useEffect(() => {
     const element = buttonRef.current
@@ -65,6 +67,8 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
       if (params.glowSpeed !== undefined) setGlowSpeed(params.glowSpeed)
       if (params.glowSize !== undefined) setGlowSize(params.glowSize)
+      if (params.textColor !== undefined) setTextColor(params.textColor)
+      if (params.bgColor !== undefined) setBgColor(params.bgColor)
     }
 
     element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
@@ -110,6 +114,8 @@ export function Button(props: ButtonUnionProps): JSX.Element {
         type={type}
         style={{
           animation: `buttonGlow ${glowSpeed}s ease-in-out infinite`,
+          color: textColor,
+          backgroundColor: bgColor,
         }}
         {...rest}
       >
@@ -160,6 +166,9 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
 
 
 
