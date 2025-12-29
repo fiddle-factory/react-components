@@ -1,4 +1,4 @@
-import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState, type ComponentProps, JSX, ReactNode } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +48,31 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  
+  // Animation configuration state
+  const [glowColor, setGlowColor] = useState("#3b82f6")
+  const [glowIntensity, setGlowIntensity] = useState(0.6)
+  const [glowSize, setGlowSize] = useState(8)
+  const [animationSpeed, setAnimationSpeed] = useState(2)
+  
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+    
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.glowColor !== undefined) setGlowColor(params.glowColor)
+      if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
+      if (params.glowSize !== undefined) setGlowSize(params.glowSize)
+      if (params.animationSpeed !== undefined) setAnimationSpeed(params.animationSpeed)
+    }
+    
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -60,12 +85,31 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  // Convert hex to RGB
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 59, g: 130, b: 246 }
+  }
+
+  const rgb = hexToRgb(glowColor)
+  const boxShadowValue = `0 0 ${glowSize}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity}), 0 0 ${glowSize * 2}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.5}), inset 0 0 ${glowSize}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.3})`
+
   return (
     <button
+      ref={buttonRef}
+      data-config-id="button-border-glow"
       aria-pressed={isActive}
       className={combinedClassName}
       disabled={isDisabled || isLoading}
       type={type}
+      style={{
+        animation: `borderGlow ${animationSpeed}s ease-in-out infinite`,
+        boxShadow: boxShadowValue,
+      }}
       {...rest}
     >
       <ButtonBackground
@@ -76,6 +120,20 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       {!isLoading && iconStart}
       {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
       {!isLoading && iconEnd}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes borderGlow {
+            0%, 100% {
+              filter: brightness(1);
+              box-shadow: 0 0 ${glowSize}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity}), 0 0 ${glowSize * 2}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.5}), inset 0 0 ${glowSize}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.3});
+            }
+            50% {
+              filter: brightness(1.2);
+              box-shadow: 0 0 ${glowSize * 1.5}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 1.2}), 0 0 ${glowSize * 3}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.7}), inset 0 0 ${glowSize * 1.5}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${glowIntensity * 0.5});
+            }
+          }
+        `
+      }} />
     </button>
   )
 }
@@ -105,3 +163,5 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
