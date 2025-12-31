@@ -1,4 +1,5 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +49,32 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  
+  // Animation configuration state
+  const [textColorStart, setTextColorStart] = useState("#ffffff")
+  const [textColorEnd, setTextColorEnd] = useState("#a0a0a0")
+  const [animationDuration, setAnimationDuration] = useState(2)
+  const [animationEnabled, setAnimationEnabled] = useState(true)
+  
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+    
+    const handleAnimationUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent
+      const params = customEvent.detail
+      if (params.textColorStart !== undefined) setTextColorStart(params.textColorStart)
+      if (params.textColorEnd !== undefined) setTextColorEnd(params.textColorEnd)
+      if (params.animationDuration !== undefined) setAnimationDuration(params.animationDuration)
+      if (params.animationEnabled !== undefined) setAnimationEnabled(params.animationEnabled)
+    }
+    
+    element.addEventListener('animation:update', handleAnimationUpdate)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -60,23 +87,42 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  // Generate unique animation name
+  const animationName = `textColorAnimation_${Math.random().toString(36).substr(2, 9)}`
+  
+  // Create keyframes dynamically
+  const keyframes = animationEnabled ? `
+    @keyframes ${animationName} {
+      0%, 100% { color: ${textColorStart}; }
+      50% { color: ${textColorEnd}; }
+    }
+  ` : ''
+
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      {animationEnabled && <style>{keyframes}</style>}
+      <button
+        ref={buttonRef}
+        data-config-id="button-text-color-animation"
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        style={animationEnabled ? {
+          animation: `${animationName} ${animationDuration}s ease-in-out infinite`,
+        } : undefined}
+        {...rest}
+      >
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+    </>
   )
 }
 
@@ -105,3 +151,5 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
