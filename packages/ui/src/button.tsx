@@ -1,7 +1,8 @@
-import type { ComponentProps, JSX, ReactNode } from "react"
+import { useState, type ComponentProps, type JSX, type ReactNode } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
+import { FireworksOverlay } from "@/fireworks-overlay"
 
 export interface ButtonIconProps extends ButtonPropsInternal {
   children?: ReactNode
@@ -45,8 +46,16 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     size = 40,
     type = "button",
     variant = "primary",
+    onClick,
     ...rest
   } = props
+
+  const [showFireworks, setShowFireworks] = useState(false)
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setShowFireworks(true)
+    onClick?.(e)
+  }
 
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
@@ -61,22 +70,26 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .trim()
 
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      <button
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        onClick={handleClick}
+        {...rest}
+      >
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+      {showFireworks && <FireworksOverlay onClose={() => setShowFireworks(false)} />}
+    </>
   )
 }
 
@@ -105,3 +118,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
