@@ -1,3 +1,5 @@
+"use client"
+
 import { useRef, useState, type ComponentProps, type JSX } from "react"
 import styles from "@/add-to-cart.module.css"
 import { FireworksOverlay } from "@/fireworks-overlay"
@@ -170,4 +172,5 @@ export function AddToCart({ text = "Add to cart", className = "", onClick, ...re
     </>
   )
 }
+
 

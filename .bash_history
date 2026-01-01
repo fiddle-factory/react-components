@@ -3,3 +3,7 @@ export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=100
 export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=10000; export HISTFILESIZE=10000; export PROMPT_COMMAND="history -a; history -n"; source /etc/bash.bashrc 2>/dev/null || true; source ~/.bashrc 2>/dev/null || true; history -r; clear
 export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=10000; export HISTFILESIZE=10000; export PROMPT_COMMAND="history -a; history -n"; source /etc/bash.bashrc 2>/dev/null || true; source ~/.bashrc 2>/dev/null || true; history -r; clear
 export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=10000; export HISTFILESIZE=10000; export PROMPT_COMMAND="history -a; history -n"; source /etc/bash.bashrc 2>/dev/null || true; source ~/.bashrc 2>/dev/null || true; history -r; clear
+export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=10000; export HISTFILESIZE=10000; export PROMPT_COMMAND="history -a; history -n"; source /etc/bash.bashrc 2>/dev/null || true; source ~/.bashrc 2>/dev/null || true; history -r; clear
+export TERM=xterm-256color; export HISTFILE=~/.bash_history; export HISTSIZE=10000; export HISTFILESIZE=10000; export PROMPT_COMMAND="history -a; history -n"; source /etc/bash.bashrc 2>/dev/null || true; source ~/.bashrc 2>/dev/null || true; history -r; clear
+bun run build
+bun run build
