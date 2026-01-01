@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import styles from "@/fireworks.module.css"
 
@@ -46,4 +48,5 @@ export function FireworksOverlay({ onClose }: FireworksOverlayProps) {
     </div>
   )
 }
+
 
