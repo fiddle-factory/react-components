@@ -1,4 +1,5 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useCallback, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +49,23 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const [fireworks, setFireworks] = useState<Array<{ id: number; x: number; y: number }>>([])
+
+  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    const newFirework = { id: Date.now(), x, y }
+    setFireworks(prev => [...prev, newFirework])
+    
+    setTimeout(() => {
+      setFireworks(prev => prev.filter(fw => fw.id !== newFirework.id))
+    }, 1000)
+
+    rest.onClick?.(e)
+  }, [rest.onClick])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -67,6 +85,7 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       disabled={isDisabled || isLoading}
       type={type}
       {...rest}
+      onClick={handleClick}
     >
       <ButtonBackground
         isRounded={isRounded}
@@ -76,6 +95,53 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       {!isLoading && iconStart}
       {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
       {!isLoading && iconEnd}
+      {fireworks.map(fw => (
+        <span
+          key={fw.id}
+          style={{
+            position: 'absolute',
+            left: fw.x,
+            top: fw.y,
+            pointerEvents: 'none',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          {[...Array(12)].map((_, i) => (
+            <span
+              key={i}
+              style={{
+                position: 'absolute',
+                width: '4px',
+                height: '4px',
+                borderRadius: '50%',
+                background: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                animation: `firework-particle-${i} 1s ease-out forwards`,
+                '--angle': `${(i * 30) * Math.PI / 180}`,
+              } as React.CSSProperties}
+            />
+          ))}
+        </span>
+      ))}
+      <style>{`
+        ${[...Array(12)].map((_, i) => {
+          const angle = (i * 30) * Math.PI / 180
+          const distance = 60
+          const x = Math.cos(angle) * distance
+          const y = Math.sin(angle) * distance
+          return `
+            @keyframes firework-particle-${i} {
+              0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+              }
+              100% {
+                transform: translate(${x}px, ${y}px) scale(0);
+                opacity: 0;
+              }
+            }
+          `
+        }).join('\n')}
+      `}</style>
     </button>
   )
 }
@@ -105,3 +171,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
