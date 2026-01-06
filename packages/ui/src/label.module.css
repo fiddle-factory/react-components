@@ -5,4 +5,12 @@
   width: fit-content;
   font-size: 13px;
   color: var(--color-gray-11, #646464);
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
 }
+
+.label:hover {
+  color: #ff8c00;
+  transform: translateY(-2px);
+}
+
