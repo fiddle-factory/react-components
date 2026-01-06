@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: "Label",
+    children: "Anukkrit",
   },
 }
 
@@ -96,3 +96,4 @@ export const AccessibilityLabel: Story = {
     htmlFor: "search-input",
   },
 }
+
