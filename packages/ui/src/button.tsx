@@ -1,7 +1,18 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
+
+// Helper function to convert hex to RGB
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  hex = hex.replace(/^#/, '')
+  const bigint = parseInt(hex, 16)
+  const r = (bigint >> 16) & 255
+  const g = (bigint >> 8) & 255
+  const b = bigint & 255
+  return { r, g, b }
+}
 
 export interface ButtonIconProps extends ButtonPropsInternal {
   children?: ReactNode
@@ -48,6 +59,30 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  // Animation configuration state
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [bgColor1, setBgColor1] = useState("#3b82f6")
+  const [bgColor2, setBgColor2] = useState("#8b5cf6")
+  const [animSpeed, setAnimSpeed] = useState(3)
+  const [animIntensity, setAnimIntensity] = useState(0.15)
+
+  // Listen for animation configuration updates
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.bgColor1 !== undefined) setBgColor1(params.bgColor1)
+      if (params.bgColor2 !== undefined) setBgColor2(params.bgColor2)
+      if (params.animSpeed !== undefined) setAnimSpeed(params.animSpeed)
+      if (params.animIntensity !== undefined) setAnimIntensity(params.animIntensity)
+    }
+
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -60,23 +95,50 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .replaceAll(/\s+/g, " ")
     .trim()
 
+  // Generate background animation styles
+  const color1 = hexToRgb(bgColor1)
+  const color2 = hexToRgb(bgColor2)
+  const animationStyles = {
+    position: 'absolute' as const,
+    inset: 0,
+    borderRadius: 'inherit',
+    opacity: animIntensity,
+    background: `linear-gradient(45deg, rgba(${color1.r}, ${color1.g}, ${color1.b}, 1) 0%, rgba(${color2.r}, ${color2.g}, ${color2.b}, 1) 100%)`,
+    backgroundSize: '200% 200%',
+    animation: `bgColorShift ${animSpeed}s ease infinite`,
+    pointerEvents: 'none' as const,
+    zIndex: 0,
+  }
+
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      <style>{`
+        @keyframes bgColorShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
+      <button
+        ref={buttonRef}
+        data-config-id="button-bg-animation"
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        {...rest}
+      >
+        <div style={animationStyles} />
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+    </>
   )
 }
 
@@ -105,3 +167,7 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
+
