@@ -187,13 +187,13 @@
 
 /* Primary */
 .button__variant_primary {
-  color: var(--color-button-gray-1);
+  color: var(--color-white, #ffffff);
   background-image: linear-gradient(
     to bottom,
-    color-mix(in oklab, var(--color-button-gray-12) 90%, transparent),
-    var(--color-button-gray-12)
+    #ef4444,
+    #dc2626
   );
-  border-color: var(--color-button-gray-12);
+  border-color: #dc2626;
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
@@ -203,7 +203,7 @@
 .button__variant_primary:enabled:active {
   box-shadow:
     inset 0 -1px 0 0 rgba(255, 255, 255, 0.25),
-    inset 0 1px 0 0 var(--color-button-gray-12) !important;
+    inset 0 1px 0 0 #b91c1c !important;
 }
 
 /* Secondary */
@@ -273,3 +273,5 @@
 .button__width_full {
   width: 100%;
 }
+
+
