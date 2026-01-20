@@ -26,7 +26,8 @@ export default {
   if (process.env.BUILD_STATIC !== 'true') {
       finalConfig.base = '/storybook';
     }
-    finalConfig.server.hmr.host = `${finalConfig.server.hmr.port}-${process.env.E2B_SANDBOX_ID}.e2b.app`;
+    console.log(finalConfig)
+    finalConfig.server.hmr.host = `${finalConfig.server.port}-${process.env.E2B_SANDBOX_ID}.e2b.app`;
     return finalConfig;
   },
 };
