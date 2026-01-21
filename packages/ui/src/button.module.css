@@ -187,13 +187,13 @@
 
 /* Primary */
 .button__variant_primary {
-  color: #000000;
+  color: #ffffff;
   background-image: linear-gradient(
     to bottom,
-    #ffeb3b,
-    #fdd835
+    #42a5f5,
+    #1e88e5
   );
-  border-color: #fbc02d;
+  border-color: #1976d2;
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
@@ -273,4 +273,5 @@
 .button__width_full {
   width: 100%;
 }
+
 
