@@ -1,4 +1,5 @@
 import type { ComponentProps, JSX, ReactNode } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "@/button.module.css"
 import { ButtonBackground } from "@/button-background"
 import { ButtonSpinner } from "@/button-spinner"
@@ -48,6 +49,28 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     ...rest
   } = props
 
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [glowColor, setGlowColor] = useState("#ff0000")
+  const [glowIntensity, setGlowIntensity] = useState(0.8)
+  const [glowSize, setGlowSize] = useState(20)
+  const [glowSpeed, setGlowSpeed] = useState(2)
+
+  useEffect(() => {
+    const element = buttonRef.current
+    if (!element) return
+
+    const handleAnimationUpdate = (event: CustomEvent) => {
+      const params = event.detail
+      if (params.glowColor !== undefined) setGlowColor(params.glowColor)
+      if (params.glowIntensity !== undefined) setGlowIntensity(params.glowIntensity)
+      if (params.glowSize !== undefined) setGlowSize(params.glowSize)
+      if (params.glowSpeed !== undefined) setGlowSpeed(params.glowSpeed)
+    }
+
+    element.addEventListener('animation:update', handleAnimationUpdate as EventListener)
+    return () => element.removeEventListener('animation:update', handleAnimationUpdate as EventListener)
+  }, [])
+
   const combinedClassName = `
     ${BUTTON_CLASS_NAME.BASE}
     ${BUTTON_CLASS_NAME.SIZE[size]}
@@ -61,22 +84,40 @@ export function Button(props: ButtonUnionProps): JSX.Element {
     .trim()
 
   return (
-    <button
-      aria-pressed={isActive}
-      className={combinedClassName}
-      disabled={isDisabled || isLoading}
-      type={type}
-      {...rest}
-    >
-      <ButtonBackground
-        isRounded={isRounded}
-        variant={variant}
-      />
-      {isLoading && <ButtonSpinner />}
-      {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
-      {!isLoading && iconEnd}
-    </button>
+    <>
+      <button
+        ref={buttonRef}
+        aria-pressed={isActive}
+        className={combinedClassName}
+        disabled={isDisabled || isLoading}
+        type={type}
+        data-config-id="storybook-root"
+        style={{
+          animation: `glow-pulse ${glowSpeed}s ease-in-out infinite`,
+          boxShadow: `0 0 ${glowSize}px ${glowColor}`,
+        }}
+        {...rest}
+      >
+        <ButtonBackground
+          isRounded={isRounded}
+          variant={variant}
+        />
+        {isLoading && <ButtonSpinner />}
+        {!isLoading && iconStart}
+        {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+        {!isLoading && iconEnd}
+      </button>
+      <style>{`
+        @keyframes glow-pulse {
+          0%, 100% {
+            filter: drop-shadow(0 0 ${glowSize * 0.5}px ${glowColor}${Math.round(glowIntensity * 255).toString(16).padStart(2, '0')});
+          }
+          50% {
+            filter: drop-shadow(0 0 ${glowSize}px ${glowColor}${Math.round(glowIntensity * 255).toString(16).padStart(2, '0')});
+          }
+        }
+      `}</style>
+    </>
   )
 }
 
@@ -105,3 +146,6 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
+
+
