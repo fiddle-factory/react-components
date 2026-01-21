@@ -6,7 +6,7 @@
     "dev": "storybook dev --no-open --port 6006"
   },
   "dependencies": {
-    "@fiddle-factory/storybook-listener": "latest",
+    "@fiddle-factory/storybook-listener": "^1.0.11",
     "@nattui/react-components": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
