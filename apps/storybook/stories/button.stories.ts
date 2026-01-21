@@ -28,7 +28,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: "Dummy Button",
+    children: "Random Dummy Button",
   },
 }
 
@@ -116,4 +116,5 @@ export const WithIcons: Story = {
     iconStart: "🚀",
   },
 }
+
 
