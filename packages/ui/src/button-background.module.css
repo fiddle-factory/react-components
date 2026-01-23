@@ -10,6 +10,9 @@
   filter: none !important;
   transition-duration: inherit;
   transition-property: opacity;
+  box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.6), 
+              0 0 40px 10px rgba(255, 215, 0, 0.4),
+              inset 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
 /* Rounded */
@@ -45,3 +48,4 @@
     var(--color-black-a3, rgba(0, 0, 0, 0.3))
   );
 }
+
