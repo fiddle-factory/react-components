@@ -34,7 +34,7 @@ export const Default: Story = {
 
 export const Primary: Story = {
   args: {
-    children: "Primary Button",
+    children: "llllllluuuluuu",
     variant: "primary",
   },
 }
@@ -116,3 +116,4 @@ export const WithIcons: Story = {
     iconStart: "🚀",
   },
 }
+
