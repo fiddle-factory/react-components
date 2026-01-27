@@ -16,7 +16,7 @@
   --color-button-gray-12: var(--color-gray-12);
 
   --color-button-primary-1: var(--color-primary-light-1);
-  --color-button-primary-2: var(--color-primary-light-2);
+  --color-button-primary-2: var(--color-primitive-blue-a2);
   --color-button-primary-3: var(--color-primary-light-3);
   --color-button-primary-4: var(--color-primary-light-4);
   --color-button-primary-5: var(--color-primary-light-5);
@@ -273,3 +273,4 @@
 .button__width_full {
   width: 100%;
 }
+
