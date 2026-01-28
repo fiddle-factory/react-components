@@ -1,56 +1,71 @@
-import type { StorybookConfig } from "@storybook/react-vite"
-import { resolve } from "node:path"
+import { mergeConfig } from 'vite';
+import originalConfig from './original-main';
 
-// Storybook configuration for React Components E2B template
-// Optimized for E2B proxy URL compatibility with Vite
-const config: StorybookConfig = {
-  framework: "@storybook/react-vite",
-  stories: ["../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+const getStories = () => {
+  const envStories = process.env.STORIES;
+
+  if (envStories) {
+    // Split by comma and process each path
+    const s = envStories.split(',').map(pattern => {
+      let trimmed = pattern.trim();
+
+      // Strip leading ./ or ../ to normalize the path
+      trimmed = trimmed.replace(/^\.\.?\//, '');
+
+      // Prepend ../ to make it relative to .storybook directory
+      const path = `../${trimmed}`;
+
+      // If it's a specific file (has an extension), convert to a glob pattern
+      // that Storybook's indexer can match
+      if (path.match(/\.(tsx|ts|jsx|js|mjs)$/)) {
+        // Replace the specific extension with a glob pattern
+        return path.replace(/\.(tsx|ts|jsx|js|mjs)$/, '.@(js|jsx|mjs|ts|tsx)');
+      }
+
+      // If it's already a pattern (contains **), return as is
+      return path;
+    });
+    console.log(`Using STORIES from env: ${JSON.stringify(s)}`);
+    return s;
+  }
+
+  return undefined;
+};
+
+const stories = getStories();
+
+export default {
+  ...originalConfig,
+  ...(stories ? { stories } : {}),
+  viteFinal: async (config, { configType, port, host }) => {
+    // Call original viteFinal first if it exists
+    const customConfig = {
+      server: {
+        host: '0.0.0.0',
+        strictPort: false,
+        allowedHosts: true,
+        hmr: {
+          clientPort: 443,
+          host: `${port}-${process.env.E2B_SANDBOX_ID}.e2b.app`,
+          overlay: false,
+        }
+      }
+  };
+    let finalConfig = config;
+    if (originalConfig.viteFinal) {
+      finalConfig = await originalConfig.viteFinal(config, { configType });
+    }
+
+    // Merge with custom configuration
+    finalConfig = mergeConfig(finalConfig, customConfig);
   
-  // Vite configuration for E2B compatibility
-  viteFinal: async (config) => {
-    // Configure server for E2B environment
-    config.server = {
-      ...config.server,
-      host: '0.0.0.0',
-      port: 6006,
-      strictPort: true,
-      // HMR configuration for E2B
-      hmr: {
-        clientPort: 6006,
-        host: 'localhost',
-      },
-      fs: {
-        allow: Array.from(
-          new Set([
-            ...(config.server?.fs?.allow ?? []),
-            resolve(process.cwd()),
-            resolve(process.cwd(), "../"),
-            resolve(process.cwd(), "../../"),
-            resolve(process.cwd(), "../../packages/ui"),
-          ])
-        ),
-      },
-    } as any;
-    
-    // CRITICAL: Allow all hosts for E2B proxy URLs (Vite 5.x+)
-    // Using type assertion because TypeScript definitions may not be up to date
-    (config.server as any).allowedHosts = true;
-
-    config.resolve = {
-      ...config.resolve,
-      alias: {
-        ...(config.resolve?.alias ?? {}),
-        "@": resolve(process.cwd(), "../../packages/ui/src"),
-        "@nattui/react-components": resolve(
-          process.cwd(),
-          "../../packages/ui/src/index.ts"
-        ),
-      },
-    };
-    
-    return config;
+  // BUILD_STATIC is set to true to work around a storybook static build bug we discorered
+  // where base is set the static assets doesn't respect the base path 
+  // But the URLs do get prefixed correctly during the build so setting base to /storybook
+  // To fix this, we do not set the base during static builds
+  if (process.env.BUILD_STATIC !== 'true') {
+      finalConfig.base = '/storybook';
+    }
+    return finalConfig;
   },
-}
-
-export default config
+};
