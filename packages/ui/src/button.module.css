@@ -190,8 +190,8 @@
   color: var(--color-button-gray-1);
   background-image: linear-gradient(
     to bottom,
-    color-mix(in oklab, var(--color-button-gray-12) 90%, transparent),
-    var(--color-button-gray-12)
+    var(--color-primitive-blue-a2),
+    var(--color-primitive-blue-a2)
   );
   border-color: var(--color-primitive-blue-a2);
   box-shadow:
@@ -273,4 +273,5 @@
 .button__width_full {
   width: 100%;
 }
+
 
