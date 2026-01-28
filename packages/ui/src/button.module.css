@@ -15,18 +15,18 @@
   --color-button-gray-11: var(--color-gray-11);
   --color-button-gray-12: var(--color-gray-12);
 
-  --color-button-primary-1: var(--color-primary-light-1);
-  --color-button-primary-2: var(--color-primary-light-2);
-  --color-button-primary-3: var(--color-primary-light-3);
-  --color-button-primary-4: var(--color-primary-light-4);
-  --color-button-primary-5: var(--color-primary-light-5);
-  --color-button-primary-6: var(--color-primary-light-6);
-  --color-button-primary-7: var(--color-primary-light-7);
-  --color-button-primary-8: var(--color-primary-light-8);
-  --color-button-primary-9: var(--color-primary-light-9);
-  --color-button-primary-10: var(--color-primary-light-10);
-  --color-button-primary-11: var(--color-primary-light-11);
-  --color-button-primary-12: var(--color-primary-light-12);
+  --color-button-primary-1: var(--color-blue-light-1);
+  --color-button-primary-2: var(--color-blue-light-2);
+  --color-button-primary-3: var(--color-blue-light-3);
+  --color-button-primary-4: var(--color-blue-light-4);
+  --color-button-primary-5: var(--color-blue-light-5);
+  --color-button-primary-6: var(--color-blue-light-6);
+  --color-button-primary-7: var(--color-blue-light-7);
+  --color-button-primary-8: var(--color-blue-light-8);
+  --color-button-primary-9: var(--color-blue-light-9);
+  --color-button-primary-10: var(--color-blue-light-10);
+  --color-button-primary-11: var(--color-blue-light-11);
+  --color-button-primary-12: var(--color-blue-light-12);
 
   position: relative;
   display: flex;
@@ -273,3 +273,4 @@
 .button__width_full {
   width: 100%;
 }
+
