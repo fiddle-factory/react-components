@@ -1,5 +1,4 @@
 import type { Preview } from "@storybook/react"
-import "@fiddle-factory/storybook-listener"
 
 const preview: Preview = {
   parameters: {
