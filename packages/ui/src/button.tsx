@@ -74,7 +74,7 @@ export function Button(props: ButtonUnionProps): JSX.Element {
       />
       {isLoading && <ButtonSpinner />}
       {!isLoading && iconStart}
-      {iconOnly ? isLoading ? <></> : children : <span>{children}</span>}
+      {iconOnly ? isLoading ? <></> : children : <span className="text-[#2563eb]">{children}</span>}
       {!isLoading && iconEnd}
     </button>
   )
@@ -105,3 +105,4 @@ export const BUTTON_CLASS_NAME = {
     FULL: styles.button__width_full,
   },
 } as const
+
