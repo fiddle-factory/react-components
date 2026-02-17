@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   },
   reactCompiler: true,
   reactStrictMode: false,
+  transpilePackages: ["@nattui/react-components"],
   typedRoutes: true,
 }
 

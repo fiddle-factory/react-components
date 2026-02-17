@@ -12,7 +12,6 @@
     "apps/storybook": {
       "name": "storybook",
       "dependencies": {
-        "@fiddle-factory/storybook-listener": "latest",
         "@nattui/react-components": "workspace:*",
         "react": "catalog:",
         "react-dom": "catalog:",
@@ -190,8 +189,6 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.25.10", "", { "os": "win32", "cpu": "ia32" }, "sha512-QHPDbKkrGO8/cz9LKVnJU22HOi4pxZnZhhA2HYHez5Pz4JeffhDjf85E57Oyco163GnzNCVkZK0b/n4Y0UHcSw=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.25.10", "", { "os": "win32", "cpu": "x64" }, "sha512-9KpxSVFCu0iK1owoez6aC/s/EdUQLDN3adTxGCqxMVhrPDj6bt5dbrHDXUuq+Bs2vATFBBrQS5vdQ/Ed2P+nbw=="],
-
-    "@fiddle-factory/storybook-listener": ["@fiddle-factory/storybook-listener@1.0.2", "", {}, "sha512-OWHE3wlqo8kwOJJ4i0zi4PzBxEhJ1HGYYUbc9uRuHnIXjfYyhSCHIgQulJNnXhAuBx6N8Ayxm3Jbg1x3+ZPmXQ=="],
 
     "@floating-ui/core": ["@floating-ui/core@1.7.3", "", { "dependencies": { "@floating-ui/utils": "^0.2.10" } }, "sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w=="],
 
