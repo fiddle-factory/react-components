@@ -6,6 +6,9 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "skipLibCheck": true
   },
   "include": ["src", "stories", "global.d.ts"]
