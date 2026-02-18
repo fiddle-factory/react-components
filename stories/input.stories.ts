@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { fn } from "storybook/test"
-import { Input } from "../src/components/ui/input"
+import { Input } from "../src/components/input"
 
 const meta = {
   args: {

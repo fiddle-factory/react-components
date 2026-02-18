@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { fn } from "storybook/test"
-import { Button } from "../src/components/ui/button"
+import { Button } from "../src/components/button"
 
 const meta = {
   args: { onClick: fn() },

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { fn } from "storybook/test"
-import { Label } from "../src/components/ui/label"
+import { Label } from "../src/components/label"
 
 const meta = {
   args: {
