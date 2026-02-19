@@ -16,7 +16,6 @@ const config: StorybookConfig = {
       resolve: {
         alias: {
           "@": resolve(process.cwd(), "../../packages/ui/src"),
-          "@nattui/react-components": resolve(process.cwd(), "../../packages/ui/src/index.ts"),
         },
         dedupe: ["react", "react-dom"],
       },
