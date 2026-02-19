@@ -1,0 +1,22 @@
+{
+  "name": "storybook",
+  "type": "module",
+  "scripts": {
+    "build": "storybook build",
+    "dev": "storybook dev --no-open --port 6006"
+  },
+  "dependencies": {
+    "@nattui/react-components": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.0.4",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "^5.1.0",
+    "storybook": "^10.0.4",
+    "typescript": "catalog:",
+    "vite": "^7.2.0"
+  }
+}

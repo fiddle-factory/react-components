@@ -1,0 +1,27 @@
+{
+  "name": "web",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --port 3001",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.4",
+    "@nattui/react-components": "workspace:*",
+    "@nattui/tailwind-colors": "^0.0.4",
+    "@nattui/tailwind-exact": "^0.0.3",
+    "lucide-react": "^0.552.0",
+    "next": "^16.0.1",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.16",
+    "@types/node": "^24.10.0",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "tailwindcss": "^4.1.16",
+    "typescript": "catalog:"
+  }
+}

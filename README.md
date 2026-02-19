@@ -10,6 +10,12 @@ A collection of reusable React components built with TypeScript and CSS Modules.
 - Website: https://react-components-web.vercel.app
 - Storybook: https://react-components-storybook-mu.vercel.app
 
+## Installation
+
+```bash
+pnpm add @nattui/react-components
+```
+
 ## Usage
 
 ```tsx
@@ -25,25 +31,11 @@ function App() {
 ### Project Structure
 
 ```
-├── .storybook/                # Storybook configuration
-├── .vscode/                   # VS Code settings
-├── src/
-│   └── components/
-│       ├── index.ts                   # Main export file
-│       ├── button.tsx                 # Button component
-│       ├── button.module.css          # Button styles
-│       ├── button-background.tsx      # Button background sub-component
-│       ├── button-spinner.tsx         # Button spinner sub-component
-│       ├── input.tsx                  # Input component
-│       ├── label.tsx                  # Label component
-│       └── spacer.tsx                 # Spacer component
-├── stories/
-│   ├── button.stories.ts             # Button stories
-│   ├── input.stories.ts              # Input stories
-│   └── label.stories.ts              # Label stories
-├── biome.jsonc                # Linter & formatter config
-├── tsconfig.json              # TypeScript config
-└── tsup.config.ts             # Build config
+src/
+├── index.ts          # Main export file
+├── button.tsx        # Button component
+├── button.module.css # Button styles
+└── global.d.ts       # TypeScript declarations
 ```
 
 ### Build Configuration

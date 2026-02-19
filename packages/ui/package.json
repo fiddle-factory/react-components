@@ -1,0 +1,50 @@
+{
+  "name": "@nattui/react-components",
+  "version": "0.0.26",
+  "description": "A collection of reusable React components built with TypeScript and CSS Modules",
+  "keywords": [
+    "components",
+    "react",
+    "ui"
+  ],
+  "homepage": "https://github.com/nattui/react-components#readme",
+  "bugs": {
+    "url": "https://github.com/nattui/react-components/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nattui/react-components.git"
+  },
+  "author": "Natt Nguyen <hello@natt.sh> (https://natt.sh)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "check:type": "tsc",
+    "dev": "tsup --watch",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "tsup": "^8.5.0",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
