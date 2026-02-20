@@ -41,7 +41,8 @@
 .button_background__variant_secondary {
   background: linear-gradient(
     to bottom,
-    var(--color-black-a2, rgba(0, 0, 0, 0.4)),
-    var(--color-black-a3, rgba(0, 0, 0, 0.3))
+    rgba(220, 38, 38, 0.6),
+    rgba(185, 28, 28, 0.5)
   );
 }
+
