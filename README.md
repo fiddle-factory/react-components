@@ -47,3 +47,5 @@ The project uses [tsup](https://tsup.egoist.dev/) for building:
 - **CSS handling:** CSS files are copied to the dist folder
 - **Tree shaking:** Enabled for optimal bundle size
 - **Source maps:** Generated for debugging
+
+<!-- dummy change -->
