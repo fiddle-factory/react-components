@@ -1,5 +1,5 @@
 > [!WARNING]
-> This project is currently a work in progress.
+> This project is currently a work in progress
 
 # @nattui/react-components
 
