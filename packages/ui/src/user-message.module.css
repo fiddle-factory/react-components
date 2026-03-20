@@ -1,0 +1,110 @@
+/* ===================================================== */
+/* Base */
+/* ===================================================== */
+.user_message {
+  display: flex;
+  flex-direction: row;
+  column-gap: 12px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  font-family: var(--font-sans, sans-serif);
+  border-radius: 8px;
+  transition-duration: 150ms;
+  transition-property: background-color;
+}
+
+.user_message:hover {
+  background-color: var(--color-gray-2, #f5f5f5);
+}
+
+:global(.dark) .user_message:hover {
+  background-color: var(--color-gray-3, #1a1a1a);
+}
+
+/* ===================================================== */
+/* Avatar */
+/* ===================================================== */
+.user_message__avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-primary-light-11, #c2185b);
+  letter-spacing: 0.02em;
+  user-select: none;
+  background-color: var(--color-primary-light-3, #fce4ec);
+  border-radius: 9999px;
+}
+
+:global(.dark) .user_message__avatar {
+  color: var(--color-primary-dark-11, #f48fb1);
+  background-color: var(--color-primary-dark-3, #4a0020);
+}
+
+/* ===================================================== */
+/* Content */
+/* ===================================================== */
+.user_message__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  row-gap: 4px;
+  min-width: 0;
+}
+
+/* ===================================================== */
+/* Header */
+/* ===================================================== */
+.user_message__header {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: baseline;
+}
+
+/* ===================================================== */
+/* Name */
+/* ===================================================== */
+.user_message__name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-gray-12, #202020);
+}
+
+:global(.dark) .user_message__name {
+  color: var(--color-gray-12, #f0f0f0);
+}
+
+/* ===================================================== */
+/* Timestamp */
+/* ===================================================== */
+.user_message__timestamp {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-9, #8d8d8d);
+}
+
+/* ===================================================== */
+/* Message */
+/* ===================================================== */
+.user_message__message {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-gray-11, #4a4a4a);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+:global(.dark) .user_message__message {
+  color: var(--color-gray-11, #c8c8c8);
+}
+
