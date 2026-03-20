@@ -1,0 +1,101 @@
+/* ===================================================== */
+/* Base */
+/* ===================================================== */
+.chat_panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  height: 560px;
+  overflow: hidden;
+  font-family: var(--font-sans, sans-serif);
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-gray-4, #ebebeb);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgb(0 0 0 / 0.07);
+}
+
+:global(.dark) .chat_panel {
+  background-color: var(--color-gray-1, #111111);
+  border-color: var(--color-gray-4, #2a2a2a);
+}
+
+/* ===================================================== */
+/* Header */
+/* ===================================================== */
+.chat_panel__header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 0 16px;
+  height: 52px;
+  background-color: var(--color-gray-1, #fafafa);
+  border-bottom: 1px solid var(--color-gray-4, #ebebeb);
+}
+
+:global(.dark) .chat_panel__header {
+  background-color: var(--color-gray-2, #1a1a1a);
+  border-bottom-color: var(--color-gray-4, #2a2a2a);
+}
+
+.chat_panel__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-gray-12, #202020);
+}
+
+:global(.dark) .chat_panel__title {
+  color: var(--color-gray-12, #e8e8e8);
+}
+
+/* ===================================================== */
+/* Messages */
+/* ===================================================== */
+.chat_panel__messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  row-gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.chat_panel__messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat_panel__messages::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-5, #d9d9d9);
+  border-radius: 9999px;
+}
+
+:global(.dark) .chat_panel__messages::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-6, #3a3a3a);
+}
+
+/* ===================================================== */
+/* Input area */
+/* ===================================================== */
+.chat_panel__input_area {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--color-gray-1, #fafafa);
+  border-top: 1px solid var(--color-gray-4, #ebebeb);
+}
+
+:global(.dark) .chat_panel__input_area {
+  background-color: var(--color-gray-2, #1a1a1a);
+  border-top-color: var(--color-gray-4, #2a2a2a);
+}
+
+.chat_panel__input {
+  flex: 1;
+  min-width: 0;
+}
+
