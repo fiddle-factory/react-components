@@ -3,7 +3,7 @@
 
 # @nattui/react-components
 
-A collection of reusable React components built with TypeScript and CSS Modules.
+A collection of reusable React components built with TypeScript and CSS modules.
 
 ## Links
 
