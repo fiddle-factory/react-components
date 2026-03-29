@@ -1,4 +1,4 @@
-import { Input } from "@nattui/react-components"
+import { Input } from "@/input"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { fn } from "storybook/test"
 

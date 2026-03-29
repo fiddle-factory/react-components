@@ -1,4 +1,4 @@
-import { Label } from "@nattui/react-components"
+import { Label } from "@/label"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { fn } from "storybook/test"
 
